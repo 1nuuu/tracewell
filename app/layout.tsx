@@ -12,6 +12,10 @@ const openGraph = {
   type: "website",
   images: [{ url: `${baseURL}/og-image.png`, width: 1200, height: 630 }],
 };
+const icons = {
+  icon: "/favicon.ico",
+  apple: "/icons/apple-touch-icon-180x180.png",
+};
 export const metadata: Metadata = {
   title,
   description,
