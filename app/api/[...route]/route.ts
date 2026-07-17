@@ -1,9 +1,31 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
+import { rateLimiter } from "hono-rate-limiter";
 import { getIdsByTicker, getIdsById, guessIds } from "@/lib/token-mappings";
 export const dynamic = "force-dynamic";
 
 const app = new Hono().basePath("/api");
+
+// Rate limiting: 30 req/min per IP by default, configurable via RATE_LIMIT_PER_MINUTE
+const rateLimitMax = parseInt(process.env.RATE_LIMIT_PER_MINUTE || "30", 10);
+
+app.use(
+  "*",
+  rateLimiter({
+    windowMs: 60 * 1000, // 1 minute window
+    limit: rateLimitMax,
+    standardHeaders: true,
+    keyGenerator: (c) =>
+      c.req.header("x-forwarded-for") ||
+      c.req.header("x-real-ip") ||
+      "unknown",
+    message: {
+      error: "Too many requests. Please try again later.",
+      retryAfter: "60 seconds",
+    },
+    statusCode: 429,
+  })
+);
 
 // In-memory cache for API responses
 interface CacheEntry<T> {
