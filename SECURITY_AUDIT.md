@@ -1,6 +1,6 @@
 # Security Audit Report
 
-**Project**: Oracast Markets (Hono Agent)  
+**Project**: Tracewell (fork of Oracast Markets)  
 **Version**: 1.0.0  
 **Audit Date**: January 2026  
 **Auditor**: Automated Security Review  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This security audit evaluates the Oracast Markets cryptocurrency data platform for potential vulnerabilities, security best practices, and readiness for open source release. The application is a Next.js + Hono.js web application that fetches and displays cryptocurrency market data from public APIs.
+This security audit evaluates the Tracewell cryptocurrency data platform (forked from Oracast Markets) for potential vulnerabilities, security best practices, and readiness for open source release. The application is a Next.js + Hono.js web application that fetches and displays cryptocurrency market data from public APIs.
 
 ### Overall Risk Assessment: **LOW**
 
@@ -281,7 +281,7 @@ app.use('/api/*', cors({ origin: ['https://trusted-domain.com'] }));
 
 ## Conclusion
 
-The Oracast Markets application demonstrates good security practices for its scope and use case. The application:
+The Tracewell application (forked from Oracast Markets) demonstrates good security practices for its scope and use case. The application:
 
 1. **Has minimal attack surface** - Read-only data display with no user authentication
 2. **Uses no sensitive data** - All data is public market information
@@ -299,4 +299,4 @@ The Oracast Markets application demonstrates good security practices for its sco
 
 ---
 
-**This audit certifies that the Oracast Markets codebase is suitable for open source release.**
+**This audit certifies that the Tracewell codebase (forked from Oracast Markets) is suitable for open source release.**

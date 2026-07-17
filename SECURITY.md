@@ -8,12 +8,12 @@
 
 ## Reporting a Vulnerability
 
-We take security seriously. If you discover a security vulnerability in Oracast Markets, please report it responsibly.
+We take security seriously. If you discover a security vulnerability in Tracewell, please report it responsibly.
 
 ### How to Report
 
 1. **Do NOT** open a public GitHub issue for security vulnerabilities
-2. Email your findings to: **bunsthedev@gmail.com** (or create a private security advisory on GitHub)
+2. Email your findings to: **yourinuu@gmail.com** (or create a private security advisory on GitHub)
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce
@@ -97,4 +97,4 @@ This security policy may be updated periodically. Check this file for the latest
 
 ---
 
-Thank you for helping keep Oracast Markets secure!
+Thank you for helping keep Tracewell secure!

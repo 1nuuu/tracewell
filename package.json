@@ -1,7 +1,7 @@
 {
-  "name": "hono-agent",
+  "name": "tracewell",
   "version": "1.0.0",
-  "description": "Hono agent for the web",
+  "description": "On-chain verified market data and traceable AI analysis for Ritual Chain. Signed price and volatility feeds are published on-chain via a keeper oracle, then interpreted by a Sovereign Agent whose reasoning, sources, and execution reliability are all recorded on-chain, not hidden behind a black box API.",
   "main": "index.js",
   "author": "Val Alexander",
   "license": "MIT",

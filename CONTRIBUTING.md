@@ -1,6 +1,6 @@
-# Contributing to Oracast Markets
+# Contributing to Tracewell
 
-Thank you for your interest in contributing to Oracast Markets! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Tracewell! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -20,8 +20,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/oracast-markets.git
-   cd oracast-markets
+   git clone https://github.com/1nuuu/tracewell.git
+   cd tracewell
    ```
 
 3. **Install dependencies**:
@@ -44,7 +44,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Reporting Bugs
 
-1. Search [existing issues](https://github.com/RitualChain/oracast-markets/issues) to avoid duplicates
+1. Search [existing issues](https://github.com/1nuuu/tracewell/issues) to avoid duplicates
 2. Use the bug report template
 3. Include:
    - Clear description of the issue
@@ -55,7 +55,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Suggesting Features
 
-1. Search [existing issues](https://github.com/RitualChain/oracast-markets/issues) for similar suggestions
+1. Search [existing issues](https://github.com/1nuuu/tracewell/issues) for similar suggestions
 2. Use the feature request template
 3. Explain:
    - The problem you're trying to solve
@@ -152,7 +152,7 @@ chore: update dependencies
 ## Project Structure
 
 ```
-oracast-markets/
+tracewell/
 ├── app/                    # Next.js App Router
 │   ├── api/[...route]/    # Hono API routes
 │   ├── features/          # Features page
@@ -193,7 +193,7 @@ To add a new cryptocurrency to the default list:
 
 ## Questions?
 
-- Open a [GitHub Discussion](https://github.com/RitualChain/oracast-markets/discussions)
+- Open a [GitHub Discussion](https://github.com/1nuuu/tracewell/discussions)
 - Check existing [documentation](./docs/)
 
 ## License

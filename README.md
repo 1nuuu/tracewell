@@ -1,16 +1,22 @@
-# Oracast Markets
+# Tracewell
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Hono](https://img.shields.io/badge/Hono-4.10-orange)](https://hono.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
 
-A modern cryptocurrency market data platform built with [Hono.js](https://hono.dev/) and [Next.js](https://nextjs.org/). Provides real-time price, volume, and volatility data through an intuitive UI and RESTful API endpoints optimized for blockchain integration.
+On-chain verified market data and traceable AI analysis for Ritual Chain. Signed price and volatility feeds are published on-chain via a keeper oracle, then interpreted by a Sovereign Agent whose reasoning, sources, and execution reliability are all recorded on-chain, not hidden behind a black box API.
 
-![Oracast Markets Screenshot](public/og-image.png)
+## Credits
+
+Tracewell is a fork of [Oracast Markets](https://github.com/RitualChain/oracast-markets) by RitualChain / Val Alexander, extended with on-chain signed feeds and traceable agent analysis.
+
+![Tracewell Screenshot](public/og-image.png)
 
 ## ✨ Features
 
+- **On-Chain Verified Feeds** — Signed price and volatility data published on-chain via a keeper oracle for verifiable provenance
+- **Traceable AI Analysis** — Sovereign Agent interprets market data with full on-chain reasoning, sources, and execution reliability
 - **Real-time Market Data** — Live cryptocurrency prices, volumes, and volatility from CoinGecko
 - **Blockchain-Ready API** — uint256-encoded values scaled to 1e18 for direct smart contract consumption
 - **Fallback Resilience** — Automatic failover to Coinbase API with intelligent caching
@@ -27,8 +33,8 @@ A modern cryptocurrency market data platform built with [Hono.js](https://hono.d
 
 ```bash
 # Clone the repository
-git clone https://github.com/RitualChain/oracast-markets.git
-cd oracast-markets
+git clone https://github.com/1nuuu/tracewell.git
+cd tracewell
 
 # Install dependencies
 bun install
@@ -124,7 +130,7 @@ See [docs/integration.md](docs/integration.md) for detailed API documentation.
 ### Project Structure
 
 ```
-oracast-markets/
+tracewell/
 ├── app/
 │   ├── api/[...route]/     # Hono API routes
 │   ├── features/           # Main data display component
@@ -196,7 +202,7 @@ Copy `.env.example` to `.env.local` for custom configuration. See the file for a
 
 ### Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RitualChain/oracast-markets)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/1nuuu/tracewell)
 
 1. Push your code to GitHub
 2. Import your repository in Vercel
@@ -226,15 +232,15 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 
 - See [SECURITY.md](SECURITY.md) for our security policy
 - See [SECURITY_AUDIT.md](SECURITY_AUDIT.md) for the full security audit
-- Report vulnerabilities to: security@bunsdev.com
+- Report vulnerabilities to: yourinuu@gmail.com
 
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+## 👤 Authors
 
-**Val Alexander** — [bunsdev.com](https://bunsdev.com)
+Tracewell is maintained by [1nuuu](https://github.com/1nuuu), forked from [Oracast Markets](https://github.com/RitualChain/oracast-markets) by **Val Alexander** ([bunsdev.com](https://bunsdev.com)).
 
 ---
 
