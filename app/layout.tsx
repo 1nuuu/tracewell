@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import "../styles/globals.css";
 
-const baseURL = "https://tracewell.vercel.app";
+const baseURL = "https://tracewell-zeta.vercel.app";
 const title = "Tracewell | On-Chain Verified Market Data & AI Analysis";
 const description = "On-chain verified market data and traceable AI analysis for Ritual Chain. Signed price and volatility feeds published on-chain via a keeper oracle, interpreted by a Sovereign Agent whose reasoning is recorded on-chain.";
 const keywords = ["Tracewell", "Ritual Chain", "crypto market data", "on-chain oracle", "AI agent", "blockchain", "sovereign agent", "price feeds"];

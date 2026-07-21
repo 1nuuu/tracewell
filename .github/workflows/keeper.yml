@@ -1,0 +1,31 @@
+name: Keeper — Update OracleFeed
+
+on:
+  schedule:
+    # Every 12 minutes (aligns with OracleFeed ~2000-block schedule window)
+    - cron: "*/12 * * * *"
+  workflow_dispatch: {}  # manual trigger for testing
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: keeper
+        run: bun install
+
+      - name: Run keeper
+        working-directory: keeper
+        env:
+          KEEPER_PRIVATE_KEY: ${{ secrets.KEEPER_PRIVATE_KEY }}
+          TRACEWELL_API_URL: ${{ vars.TRACEWELL_API_URL || 'https://tracewell-zeta.vercel.app' }}
+          ORACLE_FEED_ADDRESS: ${{ vars.ORACLE_FEED_ADDRESS || '0xcF2670404434E2470eE84a44C4cc0a449686Fe90' }}
+          RITUAL_RPC_URL: ${{ vars.RITUAL_RPC_URL || 'https://rpc.ritualfoundation.org' }}
+          CHAIN_ID: ${{ vars.CHAIN_ID || '1979' }}
+        run: bun run updateFeed.ts
