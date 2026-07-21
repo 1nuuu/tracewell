@@ -239,8 +239,16 @@ async function main() {
     }
     console.log();
 
-    // ── Step 3: Build tokenIds + FeedData arrays ──
-    const timestamp = BigInt(Math.floor(Date.now() / 1000));
+    // ── Step 3: Fetch chain timestamp + build tokenIds/FeedData arrays ──
+    //
+    // NOTE: Ritual Chain uses block.timestamp in MILLISECONDS, not seconds.
+    // This is a known quirk — standard EVM chains use seconds. All timestamp
+    // values (lastUpdated, deadline) must be in milliseconds for consistency
+    // with block.timestamp comparisons in OracleFeed.batchUpdate().
+    console.log("Fetching chain timestamp...");
+    const chainBlock = await publicClient.getBlock();
+    const chainTimestamp = chainBlock.timestamp; // milliseconds on Ritual Chain
+    console.log(`  Chain timestamp: ${chainTimestamp} ms`);
     const tokenIds: `0x${string}`[] = [];
     const feedData: {
         price: bigint; volume: bigint; volatility: bigint;
@@ -258,7 +266,7 @@ async function main() {
             forecastMean: scaleTo1e18(d.forecast.mean),
             forecastLow: scaleTo1e18(d.forecast.low),
             forecastHigh: scaleTo1e18(d.forecast.high),
-            lastUpdated: timestamp,
+            lastUpdated: chainTimestamp,
         });
     }
 
@@ -270,9 +278,10 @@ async function main() {
         functionName: "lastNonce",
     }) as bigint;
     const nonce = lastNonce + 1n;
-    const deadline = timestamp + 600n; // +10 minutes
+    // Ritual Chain uses millisecond timestamps — 600000 ms = 10 minutes
+    const deadline = chainTimestamp + 600000n;
     console.log(`  lastNonce: ${lastNonce.toString()} → using nonce: ${nonce.toString()}`);
-    console.log(`  deadline:  ${deadline.toString()} (${new Date(Number(deadline) * 1000).toISOString()})`);
+    console.log(`  deadline:  ${deadline.toString()} ms (${new Date(Number(deadline)).toISOString()})`);
     console.log();
 
     // ── Step 5: Sign batch with viem EIP-712 ──
