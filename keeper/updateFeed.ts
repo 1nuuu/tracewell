@@ -41,10 +41,9 @@ const ritualChain = defineChain({
 
 const TOKENS = [
     "bitcoin", "ethereum", "tether", "binancecoin", "solana",
-    "ripple", "usd-coin", "staked-ether", "cardano", "dogecoin",
-    "tron", "chainlink", "avalanche-2", "sui", "polkadot",
+    "ripple", "usd-coin", "cardano", "dogecoin",
+    "chainlink", "avalanche-2", "sui", "polkadot",
     "shiba-inu", "litecoin", "bitcoin-cash", "uniswap", "near",
-    "aptos", "monero", "arbitrum", "cosmos", "filecoin",
 ] as const;
 
 // ─── EIP-712 domain + types (verified working in verify-viem-signing.mjs) ─
@@ -231,9 +230,10 @@ async function main() {
             failedTokens.push(tokenId);
         }
 
-        // Delay between requests (skip after the last one)
+        // Delay between requests — 3s to stay under CoinGecko free tier (30 req/min)
+        // 25 tokens × 3s = 75s total, well under the limit
         if (i < TOKENS.length - 1) {
-            await sleep(1500);
+            await sleep(3000);
         }
     }
 
