@@ -54,6 +54,24 @@ export default function Features({ initialCoinId }: { initialCoinId?: string } =
     return () => ctrl.abort();
   }, [selectedCoinId]);
 
+  // Auto-refresh market data every 5 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (selectedCoinId) {
+        fetch(`/api/features/all/${selectedCoinId}`)
+          .then(r => r.json())
+          .then(d => {
+            if (!d.error) {
+              setCoinData(d);
+              cacheRef.current.set(selectedCoinId, { data: d, timestamp: Date.now() });
+            }
+          })
+          .catch(() => {});
+      }
+    }, 300_000); // 5 min
+    return () => clearInterval(interval);
+  }, [selectedCoinId]);
+
   // Scroll reveal
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
@@ -219,7 +237,10 @@ function AnalysisCard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/analysis/latest").then(r => r.json()).then(d => { setAnalysis(d.analysis || ""); setTs(d.timestamp || 0); }).catch(() => {}).finally(() => setLoading(false));
+    const load = () => { return fetch("/api/analysis/latest").then(r => r.json()).then(d => { setAnalysis(d.analysis || ""); setTs(d.timestamp || 0); }).catch(() => {}); };
+    load().finally(() => setLoading(false));
+    const interval = setInterval(load, 300_000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) return <Card className="border-border"><CardContent className="py-12" /></Card>;
