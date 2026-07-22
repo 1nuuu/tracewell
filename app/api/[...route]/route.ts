@@ -84,9 +84,9 @@ app.get("/analysis/latest", async (c) => {
     const RPC = process.env.RITUAL_RPC_URL || "https://rpc.ritualfoundation.org";
 
     const body = [
-      { jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: ADDR, data: "0x59faca0d" }, "latest"] },
+      { jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: ADDR, data: "0x8b762d62" }, "latest"] },
       { jsonrpc: "2.0", id: 2, method: "eth_call", params: [{ to: ADDR, data: "0xb80777ea" }, "latest"] },
-      { jsonrpc: "2.0", id: 3, method: "eth_call", params: [{ to: ADDR, data: "0x82b2e257" }, "latest"] },
+      { jsonrpc: "2.0", id: 3, method: "eth_call", params: [{ to: ADDR, data: "0x5aa8b895" }, "latest"] },
     ];
 
     const res = await fetch(RPC, {
