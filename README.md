@@ -118,6 +118,20 @@ See [docs/integration.md](docs/integration.md) for detailed API documentation.
                         │  In-Memory Cache │     │  Coinbase API   │
                         │   (TTL-based)    │     │   (Fallback)    │
                         └──────────────────┘     └─────────────────┘
+                               │
+                               │ Every 4 hours (GitHub Actions)
+                               ▼
+                        ┌──────────────────┐
+                        │  Keeper Script   │
+                        │  (EIP-712 sign)  │
+                        └────────┬─────────┘
+                                 │
+                                 ▼
+                        ┌──────────────────┐
+                        │  OracleFeed.sol  │
+                        │  (Ritual Chain)  │
+                        │  On-chain oracle │
+                        └──────────────────┘
 ```
 
 ### Tech Stack
@@ -126,6 +140,9 @@ See [docs/integration.md](docs/integration.md) for detailed API documentation.
 - **API**: Hono.js 4.10
 - **Frontend**: React 19, TypeScript
 - **Styling**: Tailwind CSS, Radix UI
+- **Smart Contracts**: Solidity 0.8, Foundry, OpenZeppelin EIP-712
+- **Keeper**: viem, bun, GitHub Actions
+- **Chain**: Ritual Chain testnet (Chain ID 1979)
 
 ### Project Structure
 
@@ -138,35 +155,50 @@ tracewell/
 ├── components/ui/          # Reusable UI components
 ├── lib/                    # Utilities and constants
 ├── docs/                   # API documentation
-└── public/                 # Static assets
+├── public/                 # Static assets
+├── contracts/              # Foundry project
+│   ├── src/OracleFeed.sol  # On-chain signed data oracle
+│   ├── test/               # 18 test cases
+│   ├── script/             # Deploy scripts
+│   └── scripts/            # EIP-712 verification
+├── keeper/
+│   └── updateFeed.ts       # Off-chain batch updater
+└── .github/workflows/      # CI: scheduled keeper runs
 ```
 
 ## ⛓️ Smart Contract Integration
 
-The API provides uint256-encoded values for direct blockchain consumption:
+Tracewell includes a production OracleFeed contract on Ritual Chain testnet
+that stores signed batch updates from an off-chain keeper:
+
+- **Contract**: `0x19688CdD80F011814FA9a67CFe1A8e375CC7E57F` ([explorer](https://explorer.ritualfoundation.org/address/0x19688CdD80F011814FA9a67CFe1A8e375CC7E57F))
+- **18 tokens** updated every 4 hours via GitHub Actions
+- **EIP-712** signed batches with replay protection (strict nonce)
+- **Fail-closed** design — entire batch reverts on any invalid entry
 
 ```solidity
-contract PriceOracle {
-    uint256 public price;
-    uint256 public volume;
-    uint256 public volatility;
-    uint256 public direction;
-
-    function updateFeatures(
-        uint256 _price,
-        uint256 _volume,
-        uint256 _volatility,
-        uint256 _direction
-    ) external onlyOwner {
-        price = _price;
-        volume = _volume;
-        volatility = _volatility;
-        direction = _direction;
-    }
+// OracleFeed stores full feed data per token
+struct FeedData {
+    uint256 price;          // USD price scaled to 1e18
+    uint256 volume;         // 24H USD volume scaled to 1e18
+    uint256 volatility;     // 24H change % scaled to 1e18
+    uint256 forecastMean;   // Forecast mean price
+    uint256 forecastLow;    // Forecast low bound
+    uint256 forecastHigh;   // Forecast high bound
+    uint64 lastUpdated;     // Chain timestamp (ms)
 }
+
+function batchUpdate(
+    bytes32[] calldata tokenIds,
+    FeedData[] calldata data,
+    uint256 nonce,
+    uint256 deadline,
+    bytes calldata signature  // EIP-712 signed by keeper
+) external;
 ```
 
-See [docs/a2a.md](docs/a2a.md) for the complete AI agent integration guide.
+See [docs/integration.md](docs/integration.md) for detailed API documentation
+and [docs/a2a.md](docs/a2a.md) for the AI agent integration guide.
 
 ## 🔧 Configuration
 

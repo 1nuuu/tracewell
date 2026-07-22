@@ -1,6 +1,8 @@
 # Forecast Contract Integration
 
-> **Overview**: This document describes the integration between the Hono API and smart contracts for cryptocurrency market data. The API provides uint256-encoded values optimized for on-chain consumption.
+> **Overview**: This document describes the integration between the Tracewell API and the OracleFeed smart contract on Ritual Chain. The API provides uint256-encoded values optimized for on-chain consumption via an off-chain keeper that batches and EIP-712-signs updates.
+
+**Deployed contract**: `0x19688CdD80F011814FA9a67CFe1A8e375CC7E57F` on Ritual Chain testnet (Chain ID 1979)
 
 ---
 

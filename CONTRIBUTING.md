@@ -161,8 +161,30 @@ tracewell/
 ├── lib/                   # Utilities and constants
 ├── docs/                  # Documentation
 ├── public/                # Static assets
-└── styles/               # Global styles
+├── styles/                # Global styles
+├── contracts/             # Foundry project (Solidity)
+│   ├── src/OracleFeed.sol # On-chain signed data oracle
+│   ├── test/              # 18 Foundry tests
+│   ├── script/            # Deploy scripts
+│   └── scripts/           # EIP-712 verification tools
+├── keeper/                # Off-chain keeper
+│   └── updateFeed.ts      # Batch updater (API → sign → chain)
+└── .github/workflows/     # CI/CD
+    └── keeper.yml         # Scheduled keeper runs
 ```
+
+### Smart Contracts
+
+- **Framework**: Foundry (forge)
+- **Dependencies**: OpenZeppelin Contracts v5.2
+- **Tests**: `forge test` (18 test cases)
+- **Deploy**: `forge script script/DeployOracleFeed.s.sol`
+
+### Keeper
+
+- **Runtime**: Bun
+- **Libraries**: viem (EIP-712 signing, contract interaction)
+- **Run locally**: `cd keeper && KEEPER_PRIVATE_KEY=0x... bun run updateFeed.ts`
 
 ## Adding New Cryptocurrencies
 

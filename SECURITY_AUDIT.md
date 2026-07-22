@@ -105,7 +105,7 @@ if (input.length > 200) {
 
 #### 2. No Rate Limiting
 **Severity**: MEDIUM  
-**Status**: DOCUMENTED
+**Status**: ✅ FIXED
 
 **Issue**: API endpoints have no rate limiting
 
@@ -113,15 +113,9 @@ if (input.length > 200) {
 - Denial of Service through excessive requests
 - Abuse of upstream API quotas (CoinGecko/Coinbase)
 
-**Recommendation**: 
-- Implement rate limiting middleware for production
-- Consider using Vercel's built-in rate limiting or `hono/rate-limiter`
-
-```typescript
-// Example implementation (not included - add for production)
-import { rateLimiter } from 'hono-rate-limiter';
-app.use(rateLimiter({ windowMs: 60000, max: 100 }));
-```
+**Fix**: Implemented `hono-rate-limiter` middleware on all API routes.
+Configurable via `RATE_LIMIT_PER_MINUTE` env variable (default: 30 req/min).
+Returns 429 with JSON error on limit exceeded.
 
 #### 3. In-Memory Cache Without Bounds
 **Severity**: LOW  
