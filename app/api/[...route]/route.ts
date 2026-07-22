@@ -68,6 +68,57 @@ function setCache<T>(key: string, data: T, ttl: number): void {
   });
 }
 
+// ── Analysis endpoint (reads from on-chain AnalysisStore) ──
+app.get("/analysis/latest", async (c) => {
+  const cacheKey = getCacheKey("analysis");
+  const cached = getCached<any>(cacheKey);
+  if (cached) return c.json(cached);
+
+  try {
+    const ABI = [
+      "function analysis() external view returns (string)",
+      "function timestamp() external view returns (uint256)",
+      "function analyzer() external view returns (address)",
+    ];
+    const ADDR = process.env.ANALYSIS_STORE_ADDRESS || "0xAf35e667eDc7a0cAb688B702ad839484Db605c57";
+    const RPC = process.env.RITUAL_RPC_URL || "https://rpc.ritualfoundation.org";
+
+    const body = [
+      { jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: ADDR, data: "0x59faca0d" }, "latest"] },
+      { jsonrpc: "2.0", id: 2, method: "eth_call", params: [{ to: ADDR, data: "0xb80777ea" }, "latest"] },
+      { jsonrpc: "2.0", id: 3, method: "eth_call", params: [{ to: ADDR, data: "0x82b2e257" }, "latest"] },
+    ];
+
+    const res = await fetch(RPC, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const results = await res.json() as any[];
+
+    const analysis = decodeString(results[0]?.result) || "";
+    const timestamp = parseInt(results[1]?.result || "0", 16);
+    const analyzer = "0x" + (results[2]?.result || "").slice(26);
+
+    const data = { analysis, timestamp, analyzer };
+    setCache(cacheKey, data, 2 * 60 * 1000);
+    return c.json(data);
+  } catch {
+    const stale = cache.get(cacheKey);
+    if (stale) return c.json(stale.data);
+    return c.json({ analysis: "", timestamp: 0, analyzer: "" });
+  }
+});
+
+function decodeString(hex: string): string {
+  if (!hex || hex === "0x") return "";
+  try {
+    const bs = hex.slice(2);
+    const len = parseInt(bs.slice(64, 128), 16) * 2;
+    return Buffer.from(bs.slice(128, 128 + len), "hex").toString("utf8");
+  } catch { return ""; }
+}
+
 app.get("/health", (c) => {
   return c.json({
     status: "healthy",
