@@ -228,28 +228,66 @@ function AnalysisCard() {
   const isBearish = /bearish/i.test(analysis);
   const isBullish = /bullish/i.test(analysis);
 
+  // Extract top movers from analysis text for structured display
+  const topMoversMatch = analysis.match(/Top movers:\s*(.+?)(?:\.|$)/i);
+  const topMovers = topMoversMatch ? topMoversMatch[1].split(",").map(s => s.trim()) : [];
+  const sentimentBadge = isBearish ? "Bearish" : isBullish ? "Bullish" : "Mixed";
+  const badgeColor = isBearish
+    ? "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400 border-red-200 dark:border-red-800"
+    : isBullish
+    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
+    : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400 border-amber-200 dark:border-amber-800";
+
   return (
     <Card className="scroll-reveal border-border bg-card card-hover">
-      <CardHeader className="pb-2">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">◆</span>
-          <div className="flex-1">
-            <CardTitle className="text-sm font-semibold">Market Analysis</CardTitle>
-            <CardDescription className="flex items-center gap-2 mt-1">
-              {ts ? new Date(Number(ts)).toLocaleString() : ""}
-              <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider ${
-                isBearish ? "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400" :
-                isBullish ? "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400" :
-                "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400"
-              }`}>
-                {isBearish ? "Bearish" : isBullish ? "Bullish" : "Mixed"}
-              </span>
-            </CardDescription>
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-md bg-foreground flex items-center justify-center">
+              <svg className="w-3.5 h-3.5 text-background" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            </div>
+            <div>
+              <CardTitle className="text-sm font-semibold">AI Market Analysis</CardTitle>
+              <CardDescription className="text-[11px] mt-0.5">
+                {ts ? fmtRelative(new Date(Number(ts) * 1000)) : ""}
+              </CardDescription>
+            </div>
           </div>
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider border ${badgeColor}`}>
+            {sentimentBadge}
+          </span>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground leading-relaxed">{analysis}</p>
+      <CardContent className="space-y-4">
+        {/* Top movers */}
+        {topMovers.length > 0 && (
+          <div>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Movers</p>
+            <div className="flex flex-wrap gap-1.5">
+              {topMovers.map((m, i) => (
+                <span key={i} className="inline-flex items-center px-2 py-0.5 rounded border border-border bg-secondary/30 text-[11px] font-medium tabular-nums">
+                  {m}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Full analysis */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Summary</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{analysis}</p>
+        </div>
+
+        {/* On-chain verifier */}
+        <div className="flex items-center gap-2 pt-2 border-t border-border">
+          <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+          <p className="text-[10px] text-muted-foreground">
+            Verified on Ritual Chain · Keeper EIP-712 signed
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
@@ -260,10 +298,16 @@ function VerifiedCard() {
     <Card className="border-border bg-card">
       <CardContent className="py-4">
         <div className="flex items-center gap-3">
-          <span className="text-green-600 text-lg">◈</span>
+          <div className="w-7 h-7 rounded-md bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
           <div>
-            <p className="text-xs font-semibold">Verified on Ritual Chain</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">All data signed by keeper · EIP-712 verified</p>
+            <p className="text-xs font-semibold">On-Chain Verified</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              OracleFeed · <code className="text-[10px] bg-secondary px-1 rounded">0x1968...5E57F</code>
+            </p>
           </div>
         </div>
       </CardContent>
