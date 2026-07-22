@@ -2,7 +2,7 @@ name: Tracewell Keeper
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 * * * *'  # every hour
   workflow_dispatch:
 
 permissions:
