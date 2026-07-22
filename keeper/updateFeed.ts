@@ -199,16 +199,30 @@ Respond with ONLY the analysis text, no JSON, no markdown.`;
         }
     }
 
-    // Data-driven fallback
+    // Data-driven fallback — clean, structured, no timestamp bloat
     const sorted = [...tokenData.entries()]
         .map(([t, d]) => ({ token: t, ...d }))
         .sort((a, b) => Math.abs(b.volatility) - Math.abs(a.volatility));
 
-    const top = sorted.slice(0, 3).map(s => `${s.token} (${s.volatility > 0 ? '+' : ''}${s.volatility.toFixed(2)}%)`).join(", ");
-    const bearish = sorted.filter(s => s.volatility < 0).length;
-    const sentiment = bearish > tokenData.size / 2 ? "bearish" : bearish < tokenData.size / 3 ? "bullish" : "mixed";
+    const topMovers = sorted.slice(0, 3).map(s =>
+        `${s.token} (${s.volatility > 0 ? '+' : ''}${s.volatility.toFixed(2)}%)`
+    ).join(", ");
 
-    return `Tracewell Market Analysis: Sentiment is ${sentiment} with ${bearish}/${tokenData.size} tokens declining. Top movers: ${top}. NEAR Protocol leads declines at ${sorted[0].volatility.toFixed(2)}%. Stablecoins remain pegged. Generated at ${new Date().toISOString()}.`;
+    const bearish = sorted.filter(s => s.volatility < 0).length;
+    const total = tokenData.size;
+    const sentiment = bearish > total * 0.6 ? "bearish"
+        : bearish < total * 0.3 ? "bullish"
+        : "mixed";
+
+    const leader = sorted[0];
+    const notable = sorted.filter(s => Math.abs(s.volatility) > 2).length;
+
+    return (
+        `Market sentiment is ${sentiment} with ${bearish} of ${total} tokens declining. ` +
+        `Top movers: ${topMovers}. ` +
+        `${leader.token.charAt(0).toUpperCase() + leader.token.slice(1)} leads ${leader.volatility > 0 ? 'gains' : 'declines'} at ${leader.volatility > 0 ? '+' : ''}${leader.volatility.toFixed(2)}%. ` +
+        `${notable} tokens show significant movement (>2%). Stablecoins remain pegged.`
+    );
 }
 
 // ─── Fetch a single token's feed data from Tracewell API ─────────────────

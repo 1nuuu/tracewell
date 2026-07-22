@@ -254,10 +254,10 @@ function AnalysisCard() {
   const topMovers = topMoversMatch ? topMoversMatch[1].split(",").map(s => s.trim()) : [];
   const sentimentBadge = isBearish ? "Bearish" : isBullish ? "Bullish" : "Mixed";
   const badgeColor = isBearish
-    ? "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400 border-red-200 dark:border-red-800"
+    ? "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 border-red-200 dark:border-red-800"
     : isBullish
-    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
-    : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400 border-amber-200 dark:border-amber-800";
+    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
+    : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800";
 
   return (
     <Card className="scroll-reveal border-border bg-card card-hover">
