@@ -210,7 +210,7 @@ def main():
     delivery_selector = Web3.keccak(text="onSovereignAgentResult(bytes32,bytes)")[:4]
 
     params = [
-        executor, 0, b"", 10, 6000, "TRACEWELL_AGENT",
+        executor, 10_000, b"", 5, 6000, "TRACEWELL_AGENT",
         Web3.to_checksum_address(AGENT_ADDRESS), delivery_selector,
         3_000_000, 1_000_000_000, 100_000_000, 6,  # cliType=6 (ZeroClaw)
         prompt, encrypted,
@@ -231,6 +231,7 @@ def main():
         "from": account.address,
         "to": Web3.to_checksum_address(AGENT_ADDRESS),
         "data": tx_data,
+        "value": w3.to_wei(0.1, "ether"),  # send 0.1 RITUAL for executor
         "nonce": w3.eth.get_transaction_count(account.address),
         "maxFeePerGas": w3.to_wei(20, "gwei"),
         "maxPriorityFeePerGas": w3.to_wei(1, "gwei"),

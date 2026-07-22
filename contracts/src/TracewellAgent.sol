@@ -67,7 +67,7 @@ contract TracewellAgent {
     ///         Called by the off-chain trigger script after building the
     ///         ABI-encoded SovereignAgentRequest with encrypted secrets.
     /// @param encodedRequest Full ABI-encoded SovereignAgentRequest (23 fields)
-    function requestAnalysis(bytes calldata encodedRequest) external onlyOwner {
+    function requestAnalysis(bytes calldata encodedRequest) external payable onlyOwner {
         lastCallId = keccak256(abi.encodePacked(encodedRequest, block.timestamp));
         ISovereignAgent(SOVEREIGN_AGENT).execute(encodedRequest);
         emit AnalysisRequested(lastCallId, block.timestamp);
