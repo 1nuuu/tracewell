@@ -39,7 +39,13 @@ const ritualChain = defineChain({
 
 // ─── Token list (must match OracleFeed tokenIds exactly) ─────────────────
 
-const TOKENS = ["bitcoin", "ethereum", "solana", "binancecoin", "ripple"] as const;
+const TOKENS = [
+    "bitcoin", "ethereum", "tether", "binancecoin", "solana",
+    "ripple", "usd-coin", "staked-ether", "cardano", "dogecoin",
+    "tron", "chainlink", "avalanche-2", "sui", "polkadot",
+    "shiba-inu", "litecoin", "bitcoin-cash", "uniswap", "near",
+    "aptos", "monero", "arbitrum", "cosmos", "filecoin",
+] as const;
 
 // ─── EIP-712 domain + types (verified working in verify-viem-signing.mjs) ─
 

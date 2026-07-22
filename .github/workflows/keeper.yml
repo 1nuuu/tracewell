@@ -31,6 +31,6 @@ jobs:
         env:
           KEEPER_PRIVATE_KEY: ${{ secrets.KEEPER_PRIVATE_KEY }}
           TRACEWELL_API_URL: https://tracewell-zeta.vercel.app
-          ORACLE_FEED_ADDRESS: '0x19688CdD80F011814FA9a67CFe1A8e375CC7E57F'
+          ORACLE_FEED_ADDRESS: "0xcF2670404434E2470eE84a44C4cc0a449686Fe90"
           RITUAL_RPC_URL: https://rpc.ritualfoundation.org
           CHAIN_ID: 1979
