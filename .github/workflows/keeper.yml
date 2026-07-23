@@ -35,3 +35,4 @@ jobs:
           ANALYSIS_STORE_ADDRESS: "0xAf35e667eDc7a0cAb688B702ad839484Db605c57"
           RITUAL_RPC_URL: https://rpc.ritualfoundation.org
           CHAIN_ID: 1979
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

@@ -215,11 +215,12 @@ def main():
 
     # ── 5. configureFundAndStart ──
     delivery_selector = Web3.keccak(text="onSovereignAgentResult(bytes32,bytes)")[:4]
-    hf_repo = os.environ.get("HF_REPO_ID", "1nuuu/tracewell-agent")
+    receiver = os.environ.get("RECEIVER_ADDRESS", "0x6f9e33170C2d063a126BC591339C87faAF6dFFdf")
+    print(f"Receiver:      {receiver}")
 
     params = [
         executor, 10_000, b"", 5, 6000, "SOVEREIGN_AGENT_TASK",
-        Web3.to_checksum_address(harness), delivery_selector,
+        Web3.to_checksum_address(receiver), delivery_selector,
         3_000_000, 1_000_000_000, 100_000_000, CLI_TYPE,
         prompt, encrypted,
         ("", "", ""), ("", "", ""), [],

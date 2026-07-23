@@ -24,6 +24,7 @@ const RITUAL_RPC_URL = process.env.RITUAL_RPC_URL || "https://rpc.ritualfoundati
 const CHAIN_ID = parseInt(process.env.CHAIN_ID || "1979", 10);
 const KEEPER_PRIVATE_KEY = process.env.KEEPER_PRIVATE_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 
 if (!KEEPER_PRIVATE_KEY) {
     console.error("ERROR: KEEPER_PRIVATE_KEY not set. Export it or create keeper/.env");
@@ -172,17 +173,23 @@ ${lines.join("\n")}
 
 Respond with ONLY the analysis text, no JSON, no markdown.`;
 
-    // Try OpenAI first, fall back to data-driven summary
-    if (OPENAI_API_KEY) {
+    // Try OpenRouter first (free tier, no cost), then OpenAI, then formula fallback
+    const providers = [
+        { key: OPENROUTER_API_KEY, url: "https://openrouter.ai/api/v1/chat/completions", model: "google/gemini-2.5-flash", name: "OpenRouter" },
+        { key: OPENAI_API_KEY, url: "https://api.openai.com/v1/chat/completions", model: "gpt-4o-mini", name: "OpenAI" },
+    ];
+
+    for (const p of providers) {
+        if (!p.key) continue;
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            const response = await fetch(p.url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${OPENAI_API_KEY}`,
+                    Authorization: `Bearer ${p.key}`,
                 },
                 body: JSON.stringify({
-                    model: "gpt-4o-mini",
+                    model: p.model,
                     messages: [{ role: "user", content: prompt }],
                     max_tokens: 300,
                     temperature: 0.7,
@@ -193,9 +200,11 @@ Respond with ONLY the analysis text, no JSON, no markdown.`;
                 const json = await response.json() as any;
                 const text = json.choices?.[0]?.message?.content?.trim();
                 if (text) return text;
+            } else {
+                console.warn(`  ${p.name} returned ${response.status}, trying next...`);
             }
         } catch (_) {
-            // Fall through to data-driven summary
+            // Fall through to next provider
         }
     }
 
